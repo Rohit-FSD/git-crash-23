@@ -1,21 +1,21 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Spinner } from "../layout/Spinner";
 import { useParams } from "react-router-dom";
 import Repos from "../repos/Repos";
+import GithubContext from "../../context/github/githubContext";
 
-function User({
-     repos,
-     getUser,
-     loading,
-     getUserRepos,
-     user: { name, company, avatar_url, location, bio, blog, html_url, followers, following, public_repos, public_gists, hireable },
-}) {
+const User = () => {
+     const githubContext = useContext(GithubContext);
+     console.log(githubContext);
+     const { getUser, loading, user, repos, getUserRepos } = githubContext;
+     const { name, company, avatar_url, location, bio, blog, html_url, followers, following, public_repos, public_gists, hireable } = user;
      const { login } = useParams();
 
      useEffect(() => {
           getUser(login);
           getUserRepos(login);
+          // eslint-disable-next-line
      }, []);
 
      if (loading) return <Spinner />;
@@ -78,6 +78,6 @@ function User({
                <Repos repos={repos} />
           </Fragment>
      );
-}
+};
 
 export default User;
